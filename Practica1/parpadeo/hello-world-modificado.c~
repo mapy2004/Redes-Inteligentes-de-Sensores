@@ -1,0 +1,56 @@
+
+
+#include "contiki.h" //definiciones y funciones necesarias para programar con Contiki-NG, como la gestión de procesos, los eventos y los temporizadores.
+
+#include <stdio.h> /* Entrada y salida en C  For printf() */
+/*---------------------------------------------------------------------------*/
+
+PROCESS(periodic_process, "periodic process");
+
+PROCESS(hello_world_process, "Hello world process"); //Definir proceso, identificador interno del proceso que se utilizará en el código y nombre descriptivo  
+
+AUTOSTART_PROCESSES(&periodic_process, &hello_world_process);
+
+static process_event_t reading_event;
+
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(hello_world_process, ev, data) //Macro que define el proceso que incluye el nombre del proceso, el evento que recibe y los datos asociados
+{
+  static int contador=0;
+ 
+
+  PROCESS_BEGIN(); //inicio del proceso y lógica del programa
+
+
+  while(1) {  //bucle infinito
+    printf("Hello, world numero %d\n", contador);
+    PROCESS_WAIT_EVENT_UNTIL (ev == reading_event);
+    contador++;
+    if (contador>20){
+      contador=0;
+    }
+    //
+  }
+
+  PROCESS_END(); //finalizacion del proceso 
+}
+/*---------------------------------------------------------------------------*/
+
+
+PROCESS_THREAD(periodic_proces, ev, data) //Macro que define el proceso que incluye el nombre del proceso, el evento que recibe y los datos asociados
+{
+  static struct etimer timer; //declaracion de un temporizador llamado timer
+
+  PROCESS_BEGIN(); //inicio del proceso y lógica del programa
+
+  /* Setup a periodic timer that expires after 10 seconds. */
+  etimer_set(&timer, CLOCK_SECOND * 5);  //inicia el temporizador, indicando cuál se quiere utilizar y el tiempo 
+
+  while(1) {  //bucle infinito 
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));  //suspende temporalmente el proceso hasta que se cumpla la condición indicada, que el temporizador acabe
+    process_post_synch(&hello_world_process, evento, ptr);
+    etimer_reset(&timer); //resetea el temporizador 
+  }
+
+  PROCESS_END(); //finalizacion del proceso 
+}
