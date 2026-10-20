@@ -1,60 +1,81 @@
 
-
 #include "contiki.h"
-#include <stdio.h> 
+#include "dev/leds.h"
 
-/* Declaracion de los dos procesos */
-PROCESS(periodic_process, "periodic process");
-PROCESS(hello_world_process, "Hello world process");
+/* Declaracion de los tres procesos */
+PROCESS(parpadeo_1_process, "Parpadeo 1 process");
+PROCESS(parpadeo_2_process, "Parpadeo 2 process");
+PROCESS(timer_process, "Timer process");
 
-/* Arrancar ambos procesos */
-AUTOSTART_PROCESSES(&periodic_process, &hello_world_process);
+/* Arrancar los tres procesos */
+AUTOSTART_PROCESSES(&parpadeo_1_process,
+                    &parpadeo_2_process,
+                    &timer_process);
 
-/* Identificador del evento */
-static process_event_t reading_event;
+/* Evento que inicia el parpadeo */
+static process_event_t start_event;
 
-/* Proceso que recibe los eventos e imprime el contador */
-PROCESS_THREAD(hello_world_process, ev, data)
-{
-  static int contador = 0;
 
-  PROCESS_BEGIN();
-
-  while(1) {
-    /* Esperar a recibir el evento */
-    PROCESS_WAIT_EVENT_UNTIL(ev == reading_event);
-
-    printf("Hello, world numero %d\n", contador);
-
-    /* Incrementar y reiniciar el contador */
-    if(contador >= 20) {
-      contador = 0;
-    } else {
-      contador++;
-    }
-  }
-
-  PROCESS_END();
-}
-
-/* Proceso que genera un evento cada 5 segundos */
-PROCESS_THREAD(periodic_process, ev, data)
+/* Proceso que conmuta el LED 1 cada 2 segundos */
+PROCESS_THREAD(parpadeo_1_process, ev, data)
 {
   static struct etimer timer;
 
   PROCESS_BEGIN();
 
-  /* Reservar un identificador para el evento */
-  reading_event = process_alloc_event();
+  /* Esperar el evento inicial */
+  PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
 
   while(1) {
-    /* Esperar 5 segundos */
-    etimer_set(&timer, CLOCK_SECOND * 5);
+    etimer_set(&timer, CLOCK_SECOND * 2);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
 
-    /* Enviar el evento al proceso hello_world_process */
-    process_post(&hello_world_process, reading_event, NULL);
+    leds_toggle(LEDS_GREEN);
   }
 
   PROCESS_END();
 }
+
+
+/* Proceso que conmuta el LED 2 cada 3 segundos */
+PROCESS_THREAD(parpadeo_2_process, ev, data)
+{
+  static struct etimer timer;
+
+  PROCESS_BEGIN();
+
+  /* Esperar el evento inicial */
+  PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
+
+  while(1) {
+    etimer_set(&timer, CLOCK_SECOND * 3);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
+
+    leds_toggle(LEDS_RED);
+  }
+
+  PROCESS_END();
+}
+
+
+/* Proceso que inicia ambos parpadeos tras 5 segundos */
+PROCESS_THREAD(timer_process, ev, data)
+{
+  static struct etimer timer;
+
+  PROCESS_BEGIN();
+
+  /* Reservar un identificador de evento */
+  start_event = process_alloc_event();
+
+  /* Esperar 5 segundos */
+  etimer_set(&timer, CLOCK_SECOND * 5);
+  PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
+
+  /* Enviar el evento inicial a ambos procesos */
+  process_post(&parpadeo_1_process, start_event, NULL);
+  process_post(&parpadeo_2_process, start_event, NULL);
+
+  PROCESS_END();
+}
+
