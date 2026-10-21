@@ -11,3 +11,5 @@ nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 (donde ttyACM0 es la placa e
 por útlimo tienes que meterte a la propia placa para "escuchar" lo que envía por consola:
 make TARGET=nrf52840 BOARD=dongle PORT=/dev/ttyACM0 login.
 
+
+Hola prueba
