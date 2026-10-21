@@ -1,7 +1,7 @@
 
 ## Antes de empezar a trabajar
 
-Actualiza tu repositorio con los últimos cambios de tus compañeros:
+Actualiza tu repositorio con los últimos cambios:
 git pull
 
 ## Al terminar de trabajar
