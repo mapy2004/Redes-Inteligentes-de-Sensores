@@ -1,6 +1,6 @@
 
 #include "contiki.h"
-#include "dev/leds.h"
+#include "dev/leds.h" 
 
 /* Declaracion de los tres procesos */
 PROCESS(parpadeo_1_process, "Parpadeo 1 process");
