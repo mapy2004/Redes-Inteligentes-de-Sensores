@@ -1,3 +1,29 @@
+## Antes de empezar a trabajar
+
+Actualiza tu repositorio con los últimos cambios:
+git pull
+
+## Al terminar de trabajar
+1. Prepara los cambios realizados:
+   git add .
+2. Guarda los cambios usando un commit:
+   git commit -m "Descripción de los cambios"
+3. Sube los cambios en GitHub:
+   git push
+
+
+
+
+## Comando para simularlo en nativo 
+1. En la carpeta del proyecto donde está el .c ejecutar el comando
+
+make TARGET=native
+
+2. Buscar el programa compilado y ejecutarlo
+
+cd build/native && ./ejercicio.native
+
+
 # Guía de Desarrollo, Flasheo y Monitorización
 **Contiki-NG en nRF52840 Dongle (Entorno Docker / VirtualBox)**
 Esta guía detalla el procedimiento paso a paso para compilar aplicaciones de Contiki-NG, flashearlas en la placa nRF52840 Dongle y monitorizar su salida serie.

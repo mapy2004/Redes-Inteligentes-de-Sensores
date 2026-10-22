@@ -21,13 +21,6 @@ make TARGET=nrf52840 BOARD=dongle PORT=/dev/ttyACM0 login.
 
 
 
-## Comando para simularlo en nativo 
-1. En la carpeta del proyecto donde está el .c ejecutar el comando
 
-make TARGET=native
-
-2. Buscar el programa compilado y ejecutarlo
-
-cd build/native && ./ejercicio.native
 
 
