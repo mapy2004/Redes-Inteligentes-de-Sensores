@@ -1,9 +1,9 @@
 #include "contiki.h"
 #include "dev/leds.h"
-#include "nrf_gpio.h"
+//#include "nrf_gpio.h"
 
 /* Pin del LED verde independiente LD1: P0.06 */
-#define LED_VERDE_PIN NRF_GPIO_PIN_MAP(0, 6)
+//#define LED_VERDE_PIN NRF_GPIO_PIN_MAP(0, 6)
 
 /* Declaracion de los tres procesos */
 PROCESS(parpadeo_1_process, "Parpadeo RGB");
@@ -30,13 +30,13 @@ PROCESS_THREAD(parpadeo_1_process, ev, data)
   PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
 
   /* Encender inmediatamente al recibir el evento */
-  leds_on(LEDS_RED);
+  leds_on(LEDS_LED2);
 
   while(1) {
     etimer_set(&timer, CLOCK_SECOND * 2);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
 
-    leds_toggle(LEDS_RED);
+    leds_toggle(LEDS_LED2);
   }
 
   PROCESS_END();
@@ -52,19 +52,20 @@ PROCESS_THREAD(parpadeo_2_process, ev, data)
   PROCESS_BEGIN();
 
   /* Configurar el LED verde independiente */
-  nrf_gpio_cfg_output(LED_VERDE_PIN);
-  nrf_gpio_pin_set(LED_VERDE_PIN); /* Apagado */
+  //nrf_gpio_cfg_output(LED_VERDE_PIN);
+  //nrf_gpio_pin_set(LED_VERDE_PIN); /* Apagado */
 
   PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
 
   /* Encender inmediatamente al recibir el evento */
-  nrf_gpio_pin_clear(LED_VERDE_PIN);
+  //nrf_gpio_pin_clear(LED_VERDE_PIN);
+  leds_on(LEDS_NUM_TO_MASK(LEDS_LED1));
 
   while(1) {
     etimer_set(&timer, CLOCK_SECOND * 3);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
 
-    nrf_gpio_pin_toggle(LED_VERDE_PIN);
+    leds_toggle(LEDS_NUM_TO_MASK(LEDS_LED1));
   }
 
   PROCESS_END();
