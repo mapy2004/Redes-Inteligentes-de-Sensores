@@ -1,6 +1,7 @@
 #include "contiki.h"
 #include "arch/platform/nrf52840/common/temperature-sensor.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Declaración de los dos procesos independientes */
 PROCESS(timer_process, "Proceso Temporizador (3s)");
@@ -55,14 +56,18 @@ PROCESS_THREAD(temperature_process, ev, data)
     /* Encendido/Activación del sensor de temperatura interno */
     SENSORS_ACTIVATE(temperature_sensor);
 
+    
     /* Lectura del valor medido */
     int temp_val = temperature_sensor.value(0);
-    
-    int intemp = temp_val / 4;
-    int fractemp = (temp_val % 4) *25;
 
-    /* Imprime el valor en grados centígrados */
-    printf("Temperatura interna nRF52840: %d.%02d ºC\n", intemp,fractemp);
+    /* Conversión a grados Celsius */
+    int temp_abs = abs(temp_val);
+    int intemp = temp_abs / 4;
+    int fractemp = (temp_abs % 4) * 25;
+
+    /* Imprime la temperatura en grados centígrados */
+    printf("Temperatura interna nRF52840: %s%d.%02d ºC\n",
+          (temp_val < 0) ? "-" : "", intemp, fractemp);
 
     /* Desactivación del sensor tras la lectura */
     SENSORS_DEACTIVATE(temperature_sensor);
