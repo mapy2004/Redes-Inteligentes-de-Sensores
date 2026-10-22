@@ -6,7 +6,7 @@ contiker
 2. Acceder a la carpeta donde se encuenta el .c en cuestión, posteriormente tienes que transformar el .c a formato hexadecimal para que lo pueda leer el micro, mediante:
 
 make TARGET=nrf52840 BOARD=dongle
-
+ 
 2. Generamos un .zip del hex que meteremos posteriormente en la placa (En este caso esta puesta la ruta del ejercicio4 en cuestión, cambiar la ruta en base al archivo a enviar):
 
 nrfutil pkg generate --hw-version 52 --sd-req 0x00 --debug-mode --application build/nrf52840/dongle/ejercicio4.hex dfu.zip
