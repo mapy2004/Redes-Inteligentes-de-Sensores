@@ -30,13 +30,13 @@ PROCESS_THREAD(parpadeo_1_process, ev, data)
   PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
 
   /* Encender inmediatamente al recibir el evento */
-  leds_on(LEDS_LED2);
+  leds_on(LEDS_NUM_TO_MASK(LEDS_LED2));
 
   while(1) {
     etimer_set(&timer, CLOCK_SECOND * 2);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
 
-    leds_toggle(LEDS_LED2);
+    leds_toggle(LEDS_NUM_TO_MASK(LEDS_LED2));
   }
 
   PROCESS_END();
