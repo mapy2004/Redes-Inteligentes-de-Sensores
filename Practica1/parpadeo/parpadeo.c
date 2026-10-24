@@ -1,5 +1,6 @@
 #include "contiki.h"
 #include "dev/leds.h"
+//#include <stdio.h> 
 //#include "nrf_gpio.h"
 
 /* Pin del LED verde independiente LD1: P0.06 */
@@ -15,8 +16,7 @@ AUTOSTART_PROCESSES(&parpadeo_1_process,
                     &parpadeo_2_process,
                     &timer_process);
 
-/* Evento de inicio */
-static process_event_t start_event;
+
 
 /*--------------------------------------------------*/
 /* PROCESO 1: LED RGB cada 2 segundos                */
@@ -27,7 +27,7 @@ PROCESS_THREAD(parpadeo_1_process, ev, data)
 
   PROCESS_BEGIN();
 
-  PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
+  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_POLL);
 
   /* Encender inmediatamente al recibir el evento */
   leds_on(LEDS_NUM_TO_MASK(LEDS_LED2));
@@ -55,7 +55,7 @@ PROCESS_THREAD(parpadeo_2_process, ev, data)
   //nrf_gpio_cfg_output(LED_VERDE_PIN);
   //nrf_gpio_pin_set(LED_VERDE_PIN); /* Apagado */
 
-  PROCESS_WAIT_EVENT_UNTIL(ev == start_event);
+  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_POLL);
 
   /* Encender inmediatamente al recibir el evento */
   //nrf_gpio_pin_clear(LED_VERDE_PIN);
@@ -64,7 +64,6 @@ PROCESS_THREAD(parpadeo_2_process, ev, data)
   while(1) {
     etimer_set(&timer, CLOCK_SECOND * 3);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
-
     leds_toggle(LEDS_NUM_TO_MASK(LEDS_LED1));
   }
 
@@ -80,15 +79,15 @@ PROCESS_THREAD(timer_process, ev, data)
 
   PROCESS_BEGIN();
 
-  start_event = process_alloc_event();
 
   /* Esperar 5 segundos */
   etimer_set(&timer, CLOCK_SECOND * 5);
   PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
 
   /* Arrancar ambos procesos */
-  process_post(&parpadeo_1_process, start_event, NULL);
-  process_post(&parpadeo_2_process, start_event, NULL);
+  process_poll(&parpadeo_1_process);
+  process_poll(&parpadeo_2_process);
+
 
   PROCESS_END();
 }
