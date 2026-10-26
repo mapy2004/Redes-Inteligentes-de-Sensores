@@ -7,7 +7,7 @@ git pull
 1. Prepara los cambios realizados:
    git add .
 2. Guarda los cambios usando un commit:
-   git commit -m "Descripción de los cambios"
+   git commit -m "Descripción de los cambios hechos"
 3. Sube los cambios en GitHub:
    git push
 
