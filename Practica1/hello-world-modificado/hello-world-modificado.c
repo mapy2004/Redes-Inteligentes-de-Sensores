@@ -24,7 +24,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /* Esperar a recibir el evento */
     PROCESS_WAIT_EVENT_UNTIL(ev == reading_event);
 
-    printf("Hello, world numero %d\n", contador);
+    printf("Hello world numero %d\n", contador);
 
     /* Incrementar y reiniciar el contador */
     if(contador >= 20) {
