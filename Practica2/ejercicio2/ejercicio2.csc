@@ -17,11 +17,11 @@
     <motetype>
       org.contikios.cooja.mspmote.SkyMoteType
       <description>Sky Mote Type #1</description>
-      <firmware>[CONTIKI_DIR]/examples/rpl-border-router/build/sky/border-router.sky</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.MoteAttributes</moteinterface>
+      <source>[CONFIG_DIR]/rpl-border-router/border-router.c</source>
       <moteinterface>org.contikios.cooja.mspmote.interfaces.MspClock</moteinterface>
       <moteinterface>org.contikios.cooja.mspmote.interfaces.MspMoteID</moteinterface>
       <moteinterface>org.contikios.cooja.mspmote.interfaces.SkyButton</moteinterface>
@@ -46,9 +46,8 @@
     <motetype>
       org.contikios.cooja.mspmote.Z1MoteType
       <description>Z1 Mote Type #2</description>
-      <source>[CONTIKI_DIR]/examples/rpl-udp/udp-client.c</source>
+      <source>[CONFIG_DIR]/udp-client.c</source>
       <commands>$(MAKE) -j$(CPUS) udp-client.z1 TARGET=z1</commands>
-      <firmware>[CONTIKI_DIR]/examples/rpl-udp/build/z1/udp-client.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>

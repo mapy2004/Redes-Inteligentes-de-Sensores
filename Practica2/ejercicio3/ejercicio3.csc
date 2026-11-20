@@ -17,9 +17,8 @@
     <motetype>
       org.contikios.cooja.mspmote.SkyMoteType
       <description>Sky Mote Type #1</description>
-      <source>[CONTIKI_DIR]/examples/rpl-udp/udp-server.c</source>
+      <source>[CONFIG_DIR]/udp-server.c</source>
       <commands>$(MAKE) -j$(CPUS) udp-server.sky TARGET=sky</commands>
-      <firmware>[CONTIKI_DIR]/examples/rpl-udp/build/sky/udp-server.sky</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>
@@ -48,9 +47,8 @@
     <motetype>
       org.contikios.cooja.mspmote.Z1MoteType
       <description>Z1 Mote Type #2</description>
-      <source>[CONTIKI_DIR]/examples/rpl-udp/udp-client.c</source>
+      <source>[CONFIG_DIR]/udp-client.c</source>
       <commands>$(MAKE) -j$(CPUS) udp-client.z1 TARGET=z1</commands>
-      <firmware>[CONTIKI_DIR]/examples/rpl-udp/build/z1/udp-client.z1</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.Mote2MoteRelations</moteinterface>
