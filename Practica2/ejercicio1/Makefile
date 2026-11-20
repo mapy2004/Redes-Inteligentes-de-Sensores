@@ -1,4 +1,4 @@
-CONTIKI_PROJECT = ejercicio1
+CONTIKI = ../../..
 all: $(CONTIKI_PROJECT)
 
 CONTIKI = ../../..
