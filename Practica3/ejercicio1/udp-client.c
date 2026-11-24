@@ -34,7 +34,11 @@ udp_rx_callback(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  LOG_INFO("Temperatura en Fahrenheit calculada por el servidor '%.*s' grados.\n", datalen, (char *) data);
+  LOG_INFO("Temperatura en Fahrenheit calculada por el servidor primera fila '%.*s' grados (desde ",
+           datalen, (char *) data);
+  LOG_INFO_6ADDR(sender_addr);
+  LOG_INFO_(" | PANID: 0x%04X, CH: %d).\n",
+            IEEE802154_CONF_PANID, IEEE802154_CONF_DEFAULT_CHANNEL);
 #if LLSEC802154_CONF_ENABLED
   LOG_INFO_(" LLSEC LV:%d", uipbuf_get_attr(UIPBUF_ATTR_LLSEC_LEVEL));
 #endif
@@ -52,6 +56,9 @@ PROCESS_THREAD(udp_client_process, ev, data)
 
   PROCESS_BEGIN();
 
+  LOG_INFO("Cliente iniciado en PANID: 0x%04X | Canal: %d\n",
+           IEEE802154_CONF_PANID, IEEE802154_CONF_DEFAULT_CHANNEL);
+
   /* Initialize UDP connection */
   simple_udp_register(&udp_conn, UDP_CLIENT_PORT, NULL,
                       UDP_SERVER_PORT, udp_rx_callback);
@@ -68,14 +75,16 @@ PROCESS_THREAD(udp_client_process, ev, data)
                  tx_count, rx_count, missed_tx_count);
       }
 
-      /* Si el contador es impar -> interna (42 C); si es par -> externa (27 C) */
+      /* Valores propios para distinguirlos en el servidor: 35 C (impar) y 18 C (par) */
       if(tx_count % 2 != 0) {
-        temp_celsius = 42;
-        LOG_INFO("Enviando temperatura interna en Celsius = %d\n", temp_celsius);
+        temp_celsius = 35;
+        LOG_INFO("Enviando temperatura interna en Celsius = %d a ", temp_celsius);
       } else {
-        temp_celsius = 27;
-        LOG_INFO("Enviando temperatura externa en Celsius = %d\n", temp_celsius);
+        temp_celsius = 18;
+        LOG_INFO("Enviando temperatura externa en Celsius = %d a ", temp_celsius);
       }
+      LOG_INFO_6ADDR(&dest_ipaddr);
+      LOG_INFO_("\n");
 
       snprintf(str, sizeof(str), "%d", temp_celsius);
       simple_udp_sendto(&udp_conn, str, strlen(str), &dest_ipaddr);
